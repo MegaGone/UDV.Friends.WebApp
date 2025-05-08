@@ -27,6 +27,25 @@ services:
       - postgres
     restart: unless-stopped
 
+  # BACKEND
+  backend:
+    build:
+      context: ./UDV.Friends.Backend
+      dockerfile: Dockerfile
+    container_name: udv_backend
+    environment:
+      PORT: "3000"
+      DB_PORT: "5432"
+      DB_HOST: postgres
+      DB_USER: ${POSTGRES_USER}
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
 volumes:
   postgres_data:
     driver: local
