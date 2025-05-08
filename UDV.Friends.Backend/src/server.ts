@@ -1,4 +1,4 @@
-import { PORT } from "./config";
+import { CHANNEL, PORT } from "./config";
 import { PostgresListener } from "./database";
 import express, { Application } from "express";
 import { Server as SocketIOServer } from "socket.io";
@@ -15,7 +15,7 @@ export class Server {
   constructor() {
     this._port = +PORT;
     this._app = express();
-    this._channel = "friend_update";
+    this._channel = CHANNEL;
     this._server = createServer(this._app);
     this._listener = new PostgresListener();
 

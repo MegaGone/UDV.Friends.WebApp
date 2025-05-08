@@ -6,5 +6,6 @@ const DB_PORT = process.env.DB_PORT || 5432;
 const DB_PASSWORD = process.env.DB_PASSWORD || "";
 const DB_DATABASE = process.env.DB_DATABASE || "";
 const DB_HOST = process.env.DB_HOST || "localhost";
+const CHANNEL = process.env.CHANNEL || "friend_update";
 
-export { PORT, DB_USER, DB_PORT, DB_HOST, DB_PASSWORD, DB_DATABASE };
+export { PORT, DB_USER, DB_PORT, DB_HOST, DB_PASSWORD, DB_DATABASE, CHANNEL };

@@ -1,3 +1,4 @@
 .env
 UDV.Friends.Backend/.env
+UDV.Friends.Backend/dist/*
 UDV.Friends.Backend/node_modules

@@ -25,6 +25,6 @@ export class PostgresListener {
       callback(payload);
     });
 
-    console.log(`[INFO][PG-LISTENER] Listening on channel "${channel}"`);
+    console.log(`[INFO][POSTGRES][LISTENER] Listening on channel "${channel}"`);
   }
 }
