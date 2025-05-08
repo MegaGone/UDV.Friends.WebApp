@@ -10,7 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./my_friends_db.sql:/docker-entrypoint-initdb.d/my_friends_db.sql
+      - ./scripts/friends_schema.sql:/docker-entrypoint-initdb.d/friends_schema.sql
+      - ./scripts/friends_trigger.sql:/docker-entrypoint-initdb.d/friends_trigger.sql
     restart: unless-stopped
 
   # UI MANAGER
