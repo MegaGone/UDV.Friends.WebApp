@@ -1,8 +1,8 @@
 import { CHANNEL, PORT } from "./config";
-import { PostgresListener } from "./database";
 import express, { Application } from "express";
 import { Server as SocketIOServer } from "socket.io";
 import { createServer, Server as HttpServer } from "http";
+import { FriendEntity, PostgresListener } from "./database";
 
 export class Server {
   private readonly _port: number;
@@ -31,6 +31,29 @@ export class Server {
       console.log("[INFO][LISTENER][CHANGE]:", payload);
 
       this._io.emit(this._channel, payload);
+    });
+  }
+
+  public findRecords() {
+    this._io.on("connection", (socket) => {
+      console.log("[INFO][SOCKET] New client connected");
+
+      socket.on("get_friends", async ({ page = 1, limit = 10 }) => {
+        const offset = (page - 1) * limit;
+
+        const { rows, count } = await FriendEntity.findAndCountAll({
+          limit,
+          offset,
+          order: [["id", "ASC"]],
+        });
+
+        socket.emit("friends_page", {
+          total: count,
+          page,
+          limit,
+          data: rows,
+        });
+      });
     });
   }
 

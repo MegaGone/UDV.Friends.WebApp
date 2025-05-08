@@ -8,5 +8,6 @@ async function bootstrap(): Promise<void> {
   const server = new Server();
 
   server.onListen();
+  server.findRecords();
   server.start();
 }
