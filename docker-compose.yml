@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: udv_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./my_friends_db.sql:/docker-entrypoint-initdb.d/my_friends_db.sql
+    restart: unless-stopped
+
+  # UI MANAGER
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: udv_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
