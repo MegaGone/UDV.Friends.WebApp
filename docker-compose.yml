@@ -27,7 +27,7 @@ services:
       - postgres
     restart: unless-stopped
 
-  #BACKEND
+  # BACKEND
   backend:
     build:
       context: ./UDV.Friends.Backend
@@ -44,6 +44,21 @@ services:
       - "3000:3000"
     depends_on:
       - postgres
+    restart: unless-stopped
+
+  # FRONTEND
+  frontend:
+    build:
+      context: ./UDV.Friends.Frontend
+      dockerfile: Dockerfile
+    container_name: udv_frontend
+    environment:
+      BASE_URL: http://udv_backend:3000
+      FRIEND_CHANNEL: ${FRIEND_CHANNEL}
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
     restart: unless-stopped
 
 volumes:
