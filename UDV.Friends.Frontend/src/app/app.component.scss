@@ -5,31 +5,21 @@
   padding: 20px;
 }
 
-.custom-table {
-  width: 80%;
-  background-color: red !important;
-  max-width: 900px;
-  text-align: center;
+mat-paginator {
+  margin-top: 10px;
+}
 
-  th.mat-header-cell,
-  td.mat-cell {
-    text-align: center;
-  }
+thead {
+  background-color: #f5f5f5 !important;
 
-  th.mat-header-cell {
-    font-weight: bold;
-    background-color: #f5f5f5;
-  }
-
-  tr.mat-row:nth-child(even) {
-    background-color: #fafafa;
-  }
-
-  tr.mat-row:hover {
-    background-color: #f0f0f0;
+  tr {
+    font-size: 20px !important;
+    font-weight: bold !important;
   }
 }
 
-mat-paginator {
-  margin-top: 10px;
+tbody {
+  tr {
+    height: 75px !important;
+  }
 }

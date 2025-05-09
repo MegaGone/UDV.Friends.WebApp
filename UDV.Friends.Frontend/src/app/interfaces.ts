@@ -2,6 +2,8 @@ export interface IFriend {
   id: number;
   name: string;
   gender: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface IFindFriendsResponse {

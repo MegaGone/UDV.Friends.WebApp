@@ -11,6 +11,7 @@ import {
   IFriendUpdateResponse,
 } from './interfaces';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SocketService } from './socket.service';
 import { MatTableModule } from '@angular/material/table';
@@ -22,7 +23,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
   styleUrl: './app.component.scss',
   templateUrl: './app.component.html',
   encapsulation: ViewEncapsulation.None,
-  imports: [RouterOutlet, MatTableModule, MatPaginatorModule],
+  imports: [RouterOutlet, CommonModule, MatTableModule, MatPaginatorModule],
 })
 export class AppComponent implements OnInit, OnDestroy {
   public total = 0;
@@ -32,7 +33,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public friends: Array<IFriend> = [];
   private readonly _socketService = inject(SocketService);
-  public displayedColumns: Array<string> = ['id', 'name', 'gender'];
+  public displayedColumns: Array<string> = [
+    'id',
+    'name',
+    'gender',
+    'createdAt',
+    'updatedAt',
+  ];
 
   ngOnInit(): void {
     this._onListenUpdate();
