@@ -1,8 +1,9 @@
 import {
-  IFindFriendsResponse,
   IFriend,
+  IFindFriendsResponse,
   IFriendUpdateResponse,
 } from './interfaces';
+import Swal from 'sweetalert2';
 import { RouterOutlet } from '@angular/router';
 import { SocketService } from './socket.service';
 import { MatTableModule } from '@angular/material/table';
@@ -33,18 +34,30 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private _onListenUpdate(): void {
     this._socketService.onListenUpdate((payload: IFriendUpdateResponse) => {
-      console.log('Cambio recibido desde el backend:', payload);
+      Swal.fire({
+        icon: 'info',
+        confirmButtonText: 'Aceptar',
+        title: 'Actualización de usuario',
+        text: `Se ha actualizado el usuario: ${payload?.old?.name} con el nuevo nombre: ${payload?.new?.name}`,
+      });
 
-      const index = this.friends.findIndex(
-        (friend) => friend.id === payload.new.id
-      );
-
-      if (index !== -1) {
-        this.friends[index] = payload.new;
-      } else {
-        this.friends.push(payload.new);
-      }
+      this._updateFriendList(payload.new);
     });
+  }
+
+  private _updateFriendList(updatedFriend: IFriend): void {
+    const index = this.friends.findIndex(
+      (friend) => friend.id === updatedFriend.id
+    );
+
+    this.friends =
+      index !== -1
+        ? [
+            ...this.friends.slice(0, index),
+            updatedFriend,
+            ...this.friends.slice(index + 1),
+          ]
+        : [...this.friends, updatedFriend];
   }
 
   private _loadFriendsPage(page: number = 1, limit: number = 10): void {
