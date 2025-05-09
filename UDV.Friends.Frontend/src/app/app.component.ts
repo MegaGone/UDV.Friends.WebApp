@@ -1,8 +1,13 @@
+import {
+  IFindFriendsResponse,
+  IFriend,
+  IFriendUpdateResponse,
+} from './interfaces';
 import { RouterOutlet } from '@angular/router';
 import { SocketService } from './socket.service';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   standalone: true,
@@ -17,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public title = 'UDV.Friends.Frontend';
 
-  public friends: Array<any> = [];
+  public friends: Array<IFriend> = [];
   private readonly _socketService = inject(SocketService);
   public displayedColumns: Array<string> = ['id', 'name', 'gender'];
 
@@ -27,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private _onListenUpdate(): void {
-    this._socketService.onListenUpdate((payload: any) => {
+    this._socketService.onListenUpdate((payload: IFriendUpdateResponse) => {
       console.log('Cambio recibido desde el backend:', payload);
 
       const index = this.friends.findIndex(
@@ -45,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _loadFriendsPage(page: number = 1, limit: number = 10): void {
     this._socketService.emitGetFriends({ page, limit });
 
-    this._socketService.onFriendsPage((res: any) => {
+    this._socketService.onFriendsPage((res: IFindFriendsResponse) => {
       this.total = res.total;
       this.limit = res.limit;
       this.friends = res.data;

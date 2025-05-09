@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { environment } from '../environments/environment.development';
+import { IFindFriendsResponse, IFriendUpdateResponse } from './interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,10 @@ export class SocketService {
     this._channel = environment.FRIEND_CHANNEL;
   }
 
-  public onListenUpdate(callback: (payload: unknown) => void): void {
-    this._socket.on(this._channel, (payload: unknown) => {
+  public onListenUpdate(
+    callback: (payload: IFriendUpdateResponse) => void
+  ): void {
+    this._socket.on(this._channel, (payload: IFriendUpdateResponse) => {
       callback(payload);
     });
   }
@@ -24,8 +27,8 @@ export class SocketService {
     this._socket.emit('get_friends', payload);
   }
 
-  public onFriendsPage(callback: (data: any) => void): void {
-    this._socket.on('friends_page', (data) => {
+  public onFriendsPage(callback: (data: IFindFriendsResponse) => void): void {
+    this._socket.on('friends_page', (data: IFindFriendsResponse) => {
       callback(data);
     });
   }
