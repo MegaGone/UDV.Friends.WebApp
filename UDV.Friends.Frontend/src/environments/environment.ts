@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  BASE_URL: 'BASE_URL',
-  FRIEND_CHANNEL: 'FRIEND_CHANNEL',
+  baseUrl: 'BASE_URL_PLACEHOLDER',
+  friendChannel: 'FRIEND_CHANNEL_PLACEHOLDER',
 };
