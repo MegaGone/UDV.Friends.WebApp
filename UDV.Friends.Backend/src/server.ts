@@ -2,7 +2,7 @@ import { CHANNEL, PORT } from "./config";
 import express, { Application } from "express";
 import { Server as SocketIOServer } from "socket.io";
 import { createServer, Server as HttpServer } from "http";
-import { FriendEntity, PostgresListener } from "./database";
+import { FriendEntity, PostgresDatasource, PostgresListener } from "./database";
 
 export class Server {
   private readonly _port: number;
@@ -11,6 +11,7 @@ export class Server {
   private _listener: PostgresListener;
   private readonly _server: HttpServer;
   private readonly _io: SocketIOServer;
+  private _datasource!: PostgresDatasource;
 
   constructor() {
     this._port = +PORT;
@@ -24,6 +25,13 @@ export class Server {
         origin: "*",
       },
     });
+
+    this._initConnection();
+  }
+
+  private async _initConnection(): Promise<void> {
+    this._datasource = new PostgresDatasource();
+    await this._datasource.connect();
   }
 
   public onListen() {
