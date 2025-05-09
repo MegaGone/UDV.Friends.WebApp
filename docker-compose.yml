@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: udv_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/friends_schema.sql:/docker-entrypoint-initdb.d/friends_schema.sql
+      - ./scripts/friends_trigger.sql:/docker-entrypoint-initdb.d/friends_trigger.sql
+    restart: unless-stopped
+
+  # UI MANAGER
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: udv_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  # BACKEND
+  backend:
+    build:
+      context: ./UDV.Friends.Backend
+      dockerfile: Dockerfile
+    container_name: udv_backend
+    environment:
+      PORT: "3000"
+      DB_PORT: "5432"
+      DB_HOST: postgres
+      DB_USER: ${POSTGRES_USER}
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  # FRONTEND
+  frontend:
+    build:
+      context: ./UDV.Friends.Frontend
+      dockerfile: Dockerfile
+    container_name: udv_frontend
+    environment:
+      BASE_URL: http://udv_backend:3000
+      FRIEND_CHANNEL: ${FRIEND_CHANNEL}
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
