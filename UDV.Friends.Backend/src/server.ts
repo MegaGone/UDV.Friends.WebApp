@@ -36,16 +36,12 @@ export class Server {
 
   public onListen() {
     this._listener.listen(this._channel, (payload) => {
-      console.log("[INFO][LISTENER][CHANGE]:", payload);
-
       this._io.emit(this._channel, payload);
     });
   }
 
   public findRecords() {
     this._io.on("connection", (socket) => {
-      console.log("[INFO][SOCKET] New client connected");
-
       socket.on("get_friends", async ({ page = 1, limit = 10 }) => {
         const offset = (page - 1) * limit;
 
