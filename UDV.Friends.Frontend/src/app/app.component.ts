@@ -1,4 +1,11 @@
 import {
+  OnInit,
+  inject,
+  OnDestroy,
+  Component,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
   IFriend,
   IFindFriendsResponse,
   IFriendUpdateResponse,
@@ -7,7 +14,6 @@ import Swal from 'sweetalert2';
 import { RouterOutlet } from '@angular/router';
 import { SocketService } from './socket.service';
 import { MatTableModule } from '@angular/material/table';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -15,6 +21,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
   selector: 'app-root',
   styleUrl: './app.component.scss',
   templateUrl: './app.component.html',
+  encapsulation: ViewEncapsulation.None,
   imports: [RouterOutlet, MatTableModule, MatPaginatorModule],
 })
 export class AppComponent implements OnInit, OnDestroy {
